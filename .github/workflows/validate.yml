@@ -1,23 +1,33 @@
-name: Validate Data
-
-on:
-  push:
-  pull_request:
-
+name: addition
+on: 
+  workflow_dispatch:
+    inputs:
+      number1: 
+        type: number
+        required: true
+        description: "Enter first Number:"
+      number2:
+        type: number
+        required: true
+        description: "Enter second number:"
 jobs:
-  validate-data:
-    permissions:
-      contents: read
+  job1:
+    runs-on: ubuntu-latest
+    outputs: 
+      sum_of_two_num: ${{ steps.sum.outputs.test }}
+    steps:
+      - name: Add two numbers
+        id: sum
+        shell: bash
+        run: echo "::set-output name=test::expr ${{ github.event.inputs.number1 }} + $${{ github.event.inputs.number2 }}"
+        
+  job2:
+    needs: job1
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: The sum of two numbers
+        run: echo ${{needs.job1.outputs.sum_of_two_num}}
+      - name: sum of two numbers
+        
+        
 
-      - uses: actions/setup-node@v2
-        with:
-          node-version: "12"
-
-      - name: Validate workflows
-        run: |
-          npm ci
-          npx ts-node-script ./index.ts
-        working-directory: ./script/validate-data
