@@ -19,7 +19,7 @@ jobs:
       - name: Add two numbers
         id: sum
         shell: bash
-        run: echo "::set-output name=test::expr ${{ github.event.inputs.number1 }} + $${{ github.event.inputs.number2 }}"
+        run: echo "::set-output name=test::expr ${{ github.event.inputs.number1 }} + ${{ github.event.inputs.number2 }}"
         
   job2:
     needs: job1
